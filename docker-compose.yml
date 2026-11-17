@@ -1,0 +1,31 @@
+name: clinadapt-ai
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      CLINADAPT_DATA_DIR: /datasets
+      CLINADAPT_DB: /state/clinadapt.db
+      OLLAMA_URL: http://host.docker.internal:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:0.5b}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_API_BASE: ${LLM_API_BASE:-https://api.openai.com/v1}
+      LLM_API_MODEL: ${LLM_API_MODEL:-gpt-4o-mini}
+    volumes:
+      - "${CLINADAPT_DATA_DIR:-../../archive (1)}:/datasets:ro"
+      - "./ml/saved_models:/app/ml/saved_models:ro"
+      - "./backend/app:/app/backend/app:ro"
+      - "./frontend/dist:/app/frontend/dist:ro"
+      - "clinadapt_state:/state"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  clinadapt_state:

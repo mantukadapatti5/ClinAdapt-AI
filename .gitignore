@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+
+**/.venv/
+**/node_modules/
+**/__pycache__/
+*.py[cod]
+
+frontend/dist/
+*.db
+uploads/*
+!uploads/.gitkeep
+ml/saved_models/*
+!ml/saved_models/.gitkeep

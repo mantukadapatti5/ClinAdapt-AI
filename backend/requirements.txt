@@ -1,0 +1,5 @@
+fastapi==0.115.*
+uvicorn[standard]==0.32.*
+python-multipart
+pillow
+numpy<2  # torch 2.3 CPU wheels are built against NumPy 1.x
